@@ -19,13 +19,20 @@ namespace Battleship.Logging
             }
         }
 
+        public LogEvent(Exception ex)
+        {
+            Properties["Message"] = ex.Message;
+            Properties["StackTrace"] = ex.StackTrace;
+        }
+
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             if (Properties.ContainsKey(binder.Name))
             {
                 result = Properties[binder.Name];
                 return true;
-            } else
+            }
+            else
             {
                 result = "Invalid Property";
                 return false;
@@ -48,11 +55,18 @@ namespace Battleship.Logging
         {
             var cleanedProperties = Properties.Select(kvp =>
             {
-                // Enclose key and value in double quotes, replacing all double quotes from their contents with single quotes
-                return string.Format("\"{0}\"=\"{1}\"", 
-                    kvp.Key.Replace('"', '\''),
-                    (kvp.Value ?? "").Replace('"', '\'')
-                    );
+                try
+                {
+                    // Enclose key and value in double quotes, replacing all double quotes from their contents with single quotes
+                    return string.Format("\"{0}\"=\"{1}\"",
+                        kvp.Key.Replace('"', '\''),
+                        (kvp.Value ?? "").Replace('"', '\'')
+                        );
+                }
+                catch (Exception ex)
+                {
+                    return "LogEvent serialization error: " + ex.Message;
+                }
             });
             return string.Join(", ", cleanedProperties);
         }

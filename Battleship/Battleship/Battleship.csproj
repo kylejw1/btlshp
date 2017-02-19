@@ -52,11 +52,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Battleship.cs" />
+    <Compile Include="Coordinate.cs" />
+    <Compile Include="GameState.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\Log4NetLogger.cs" />
     <Compile Include="Logging\LogEvent.cs" />
+    <Compile Include="Logging\LoggableException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resolver.cs" />
+    <Compile Include="View\ConsoleGameBoardWindow.cs" />
+    <Compile Include="View\ConsoleView.cs" />
+    <Compile Include="GameBoard.cs" />
+    <Compile Include="View\ConsoleViewTemplates.cs" />
+    <Compile Include="View\ConsoleWindow.cs" />
+    <Compile Include="View\IView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
