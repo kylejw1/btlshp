@@ -52,6 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Battleship.cs" />
+    <Compile Include="Configuration\Configuration.cs" />
+    <Compile Include="Configuration\TextConfigurationProvider.cs" />
+    <Compile Include="Configuration\IConfigurationProvider.cs" />
     <Compile Include="Coordinate.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="Logging\ILogger.cs" />

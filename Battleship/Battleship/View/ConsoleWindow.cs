@@ -8,10 +8,12 @@ namespace Battleship.View
         public int Width { get; protected set; }
         public int Height { get; protected set; }
         protected string _template;
+        protected ConsoleColor _color;
 
-        public ConsoleWindow(string template)
+        public ConsoleWindow(string template, ConsoleColor color=ConsoleColor.White)
         {
             _template = template;
+            _color = color;
 
             int width, height;
             ConsoleViewTemplates.GetTemplateDimensions(template, out width, out height);
@@ -26,6 +28,7 @@ namespace Battleship.View
 
         protected void DrawImage(string template, int x, int y)
         {
+            
             var lines = template.Split(new string[] { Environment.NewLine }, StringSplitOptions.None).Take(Height);
 
             foreach (var line in lines)

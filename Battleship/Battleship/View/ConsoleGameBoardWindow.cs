@@ -11,7 +11,7 @@ namespace Battleship.View
         private int _x;
         private int _y;
 
-        public ConsoleGameBoardWindow(int x, int y) : base(ConsoleViewTemplates.GameBoard)
+        public ConsoleGameBoardWindow(int x, int y) : base(ConsoleViewTemplates.GameBoard, ConsoleColor.Blue)
         {
             _x = x;
             _y = y;
