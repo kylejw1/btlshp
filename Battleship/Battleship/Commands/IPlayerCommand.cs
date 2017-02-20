@@ -9,5 +9,8 @@ namespace Battleship.Commands
     public interface IPlayerCommand
     {
         void Execute();
+
+        // Undo could be implemented to allow displaying a replay of the game
+        void Undo();
     }
 }

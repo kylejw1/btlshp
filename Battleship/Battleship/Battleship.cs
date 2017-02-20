@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using Battleship.Config;
+using Battleship.Commands;
 
 namespace Battleship
 {
@@ -25,21 +26,41 @@ namespace Battleship
             // Configuration provider could take the form of a UI+Controller, Web App, etc.  For this demo, it uses Console + Std I/O
             Resolver.RegisterObject(typeof(IConfigurationProvider), new TextConfiguratonProvider(Console.In, Console.Out));
 
+            // Player command provider could take the form of a TCP socket for network play, UI+Controller, etc.  
+            Resolver.RegisterObject(typeof(IPlayerCommandProvider), new TextPlayerCommandProvider(Console.In, Console.Out));
+
             try {
 
                 var config = Resolver.Resolve<IConfigurationProvider>()
                     .GetConfiguration();
 
-                // Create an instance of the game passing in the config
+                var board1 = new GameBoard(config.Player1Name);
+                var board2 = new GameBoard(config.Player2Name);
 
+                
+                IPlayerCommandProvider playerCommandProvider = new TextPlayerCommandProvider(Console.In, Console.Out);
 
-                var view = Resolver.Resolve<IView>();
+                playerCommandProvider.CreatePlaceShipCommand(board1).Execute();
+                playerCommandProvider.CreatePlaceShipCommand(board2).Execute();
 
-                view.SetState(GameState.MENU);
-                Console.ReadLine();
-                view.SetState(GameState.PLAY);
-                Console.ReadLine();
-                view.SetState(GameState.SUNK);
+                while(!board1.Sunk && !board2.Sunk)
+                {
+                    playerCommandProvider.CreateFireShotCommand(board1).Execute();
+                    if (board2.Sunk)
+                    {
+                        break;
+                    }
+                    playerCommandProvider.CreateFireShotCommand(board2).Execute();
+                    if (board1.Sunk)
+                    {
+                        break;
+                    }
+                }
+
+                var winner = board1.Sunk ? board2 : board1;
+
+                // TODO:  Proper view instead of console write
+                Console.Out.Write("{0} wins!", winner.PlayerName);
 
             }
             catch (LoggableException ex)

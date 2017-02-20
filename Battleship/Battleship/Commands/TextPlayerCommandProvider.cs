@@ -12,14 +12,13 @@ namespace Battleship.Commands
     {
         private TextReader _input;
         private TextWriter _output;
-        private Player _player;
 
         /// <summary>
         /// Game configuration provider based on text streams.  Closure of streams is the responsibility of the caller.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="output"></param>
-        public TextPlayerCommandProvider(Player player, TextReader input, TextWriter output)
+        public TextPlayerCommandProvider(TextReader input, TextWriter output)
         {
             if (null == input || null == output)
             {
@@ -30,9 +29,9 @@ namespace Battleship.Commands
             _output = output;
         }
 
-        public IPlayerCommand CreateFireShotCommand()
+        public IPlayerCommand CreateFireShotCommand(GameBoard gameBoard)
         {
-            _output.WriteLine("{0}, what are our firing coordinates?", _player.Name);
+            _output.WriteLine("{0}, what are our firing coordinates?", gameBoard.PlayerName);
 
             Coordinate coordinate = ReadCoordinate();
             var cmd = new FireShotPlayerCommand(coordinate);
@@ -40,37 +39,24 @@ namespace Battleship.Commands
             return cmd;
         }
 
-        public IPlayerCommand CreatePlaceShipCommand()
+        public IPlayerCommand CreatePlaceShipCommand(GameBoard gameBoard)
         {
-            _output.WriteLine("{0}, choose your location!", _player.Name);
+            _output.WriteLine("{0}, choose your location!", gameBoard.PlayerName);
             TextViewTemplates.GameBoard.ForEach(line => _output.WriteLine(line));
 
             _output.WriteLine("Enter first coordinate");
             var firstCoord = ReadCoordinate();
 
             Coordinate secondCoord = null;
-            while(null == secondCoord)
+            while (null == secondCoord)
             {
                 _output.WriteLine("Enter second coordinate (ship length 3 squares vertical or horizontal)");
                 secondCoord = ReadCoordinate();
 
-                if (secondCoord.Row != firstCoord.Row && secondCoord.Col != firstCoord.Col) {
-                    _output.WriteLine("Second coordinate must be colinear to first!");
-                    continue;
-                }
-
-                var rowDist = Math.Abs(secondCoord.Row - firstCoord.Row);
-                var colDist = Math.Abs(secondCoord.Col - firstCoord.Col);
-                if (rowDist != 3 && colDist != 3)
-                {
-                    _output.WriteLine("Ship length must be 3 squares!");
-                    continue;
-                }
+                // TODO: Use ship class which will validate second coord as a legit ship start and end
             }
 
-            
-
-            return cmd;
+            return new PlaceShipPlayerCommand(gameBoard, new List<Coordinate>() { firstCoord, secondCoord });
         }
 
         private Coordinate ReadCoordinate()
@@ -92,7 +78,10 @@ namespace Battleship.Commands
                     _output.WriteLine("Row:");
                     var rowString = _input.ReadLine().Trim();
 
-                    Coordinate.TryParse(rowString, colString, out message, out coordinate);
+                    coordinate = new Coordinate();
+                    coordinate.X = 0;
+                    coordinate.Y = 1;
+                    //Coordinate.TryParse(rowString, colString, out message, out coordinate);
 
                 }
                 catch (Exception ex)

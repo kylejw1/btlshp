@@ -21,5 +21,10 @@ namespace Battleship.Commands
         {
             throw new NotImplementedException();
         }
+
+        public void Undo()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

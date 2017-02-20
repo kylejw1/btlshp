@@ -22,7 +22,7 @@ namespace Battleship.View
             var left = Console.CursorLeft;
             var top = Console.CursorTop;
 
-            Console.SetCursorPosition(this._x + 6 + (4 * shotLocation.Col), this._y + 3 + (2*shotLocation.Row));
+            Console.SetCursorPosition(this._x + 6 + (4 * shotLocation.Y), this._y + 3 + (2*shotLocation.X));
             Console.SetCursorPosition(left, top);
         }
 

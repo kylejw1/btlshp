@@ -42,6 +42,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -52,9 +53,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Battleship.cs" />
-    <Compile Include="Configuration\Configuration.cs" />
-    <Compile Include="Configuration\TextConfigurationProvider.cs" />
-    <Compile Include="Configuration\IConfigurationProvider.cs" />
+    <Compile Include="Cell.cs" />
+    <Compile Include="Commands\FireShotPlayerCommand.cs" />
+    <Compile Include="Commands\IPlayerCommand.cs" />
+    <Compile Include="Commands\IPlayerCommandProvider.cs" />
+    <Compile Include="Commands\PlaceShipPlayerCommand.cs" />
+    <Compile Include="Commands\TextPlayerCommandProvider.cs" />
+    <Compile Include="Config\Configuration.cs" />
+    <Compile Include="Config\ConfigVariables.cs" />
+    <Compile Include="Config\IConfigurationProvider.cs" />
+    <Compile Include="Config\TextConfigurationProvider.cs" />
     <Compile Include="Coordinate.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="Logging\ILogger.cs" />
@@ -69,6 +77,7 @@
     <Compile Include="View\ConsoleViewTemplates.cs" />
     <Compile Include="View\ConsoleWindow.cs" />
     <Compile Include="View\IView.cs" />
+    <Compile Include="View\TextViewTemplates.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

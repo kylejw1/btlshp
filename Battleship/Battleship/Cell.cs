@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace Battleship
 {
-    enum Orientation
+    public enum CellState
     {
-        Unknown = 0,
-        Vertical,
-        Horizontal
+        Pristine,
+        Miss,
+        Hit
     }
 
-    public class Ship
+    public class Cell
     {
-
+        public CellState State = CellState.Pristine;
     }
 }

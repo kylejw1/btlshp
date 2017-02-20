@@ -9,8 +9,8 @@ namespace Battleship.Commands
 {
     interface IPlayerCommandProvider
     {
-        IPlayerCommand CreatePlaceShipCommand();
-        IPlayerCommand CreateFireShotCommand();
+        IPlayerCommand CreatePlaceShipCommand(GameBoard gameBoard);
+        IPlayerCommand CreateFireShotCommand(GameBoard gameBoard);
 
     }
 }
