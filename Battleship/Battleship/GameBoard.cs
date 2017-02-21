@@ -7,13 +7,18 @@ namespace Battleship
 {
     public class GameBoard
     {
-        public string PlayerName { get; private set; }
         private Cell [,] _grid = new Cell[ConfigVariables.GridCols, ConfigVariables.GridRows];
         private List<Cell> _ship;
 
-        public GameBoard(string playerName)
+        public GameBoard()
         {
-            PlayerName = playerName;
+            for (int row = 0; row < ConfigVariables.GridRows; row++)
+            {
+                for (int col = 0; col < ConfigVariables.GridCols; col++)
+                {
+                    _grid[row, col] = new Cell();
+                }
+            }
         }
 
         public bool Sunk
@@ -29,21 +34,9 @@ namespace Battleship
             }
         }
 
-        public void SetShip(List<Coordinate> coordinates)
+        public void SetShip(Ship ship)
         {
-
-            // TODO: Belongs in ship class. game board shouldn't know about ship other than that it should fit in grid
-
-            if (coordinates.Count != 3)
-            {
-                throw new ArgumentOutOfRangeException("Ship must be exactly three cells");
-            }
-
-            if (!Coordinate.ColinearAboutAxes(coordinates))
-            {
-                throw new ArgumentException("Ship coordinates must be colinear about either X or Y axis");
-            }
-
+            
             if (coordinates.Any(c => c.X < 0 || c.X >= ConfigVariables.GridCols) ||
                 coordinates.Any(c => c.Y < 0 || c.Y >= ConfigVariables.GridRows))
             {
@@ -55,6 +48,13 @@ namespace Battleship
             {
                 _ship.Add(_grid[coord.X, coord.Y]);
             }
+        }
+
+        public void IncomingShot(Coordinate coordinate)
+        {
+            var cell = _grid[coordinate.X, coordinate.Y];
+            var newState = _ship.Contains(cell) ? CellState.Hit : CellState.Miss;
+            cell.State = newState;
         }
 
 

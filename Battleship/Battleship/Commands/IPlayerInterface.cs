@@ -7,10 +7,12 @@ using Battleship.Config;
 
 namespace Battleship.Commands
 {
-    interface IPlayerCommandProvider
+    public interface IPlayerInterface
     {
+        Coordinate GetFiringCoordinate(string playerName);
+
         IPlayerCommand CreatePlaceShipCommand(GameBoard gameBoard);
-        IPlayerCommand CreateFireShotCommand(GameBoard gameBoard);
+        IPlayerCommand CreateFireShotCommand(GameBoard targetGameBoard);
 
     }
 }

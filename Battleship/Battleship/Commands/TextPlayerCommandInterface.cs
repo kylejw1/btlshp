@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Battleship.Commands
 {
-    public class TextPlayerCommandProvider : IPlayerCommandProvider
+    public class TextPlayerCommandInterface : IPlayerInterface
     {
         private TextReader _input;
         private TextWriter _output;
@@ -18,7 +18,7 @@ namespace Battleship.Commands
         /// </summary>
         /// <param name="input"></param>
         /// <param name="output"></param>
-        public TextPlayerCommandProvider(TextReader input, TextWriter output)
+        public TextPlayerCommandInterface(TextReader input, TextWriter output)
         {
             if (null == input || null == output)
             {
@@ -34,7 +34,7 @@ namespace Battleship.Commands
             _output.WriteLine("{0}, what are our firing coordinates?", gameBoard.PlayerName);
 
             Coordinate coordinate = ReadCoordinate();
-            var cmd = new FireShotPlayerCommand(coordinate);
+            var cmd = new FireShotPlayerCommand(coordinate, gameBoard);
 
             return cmd;
         }
@@ -56,7 +56,14 @@ namespace Battleship.Commands
                 // TODO: Use ship class which will validate second coord as a legit ship start and end
             }
 
-            return new PlaceShipPlayerCommand(gameBoard, new List<Coordinate>() { firstCoord, secondCoord });
+            return new PlaceShipPlayerCommand(gameBoard, new List<Coordinate>() { firstCoord, secondCoord, secondCoord });
+        }
+
+        public Coordinate GetFiringCoordinate(string playerName)
+        {
+            _output.WriteLine("{0}, what are our firing coordinates?", playerName);
+
+            return ReadCoordinate();
         }
 
         private Coordinate ReadCoordinate()

@@ -10,16 +10,18 @@ namespace Battleship.Commands
     public class FireShotPlayerCommand : IPlayerCommand
     {
 
-        public readonly Coordinate Coordinate;
+        private readonly Coordinate _coordinate;
+        private readonly GameBoard _gameBoard;
 
-        public FireShotPlayerCommand(Coordinate coordinate)
+        public FireShotPlayerCommand(Coordinate coordinate, GameBoard targetGameBoard)
         {
-            Coordinate = coordinate;
+            _coordinate = coordinate;
+            _gameBoard = targetGameBoard;
         }
 
         public void Execute()
         {
-            throw new NotImplementedException();
+            _gameBoard.IncomingShot(_coordinate);
         }
 
         public void Undo()

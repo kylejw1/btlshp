@@ -26,45 +26,48 @@ namespace Battleship
             // Configuration provider could take the form of a UI+Controller, Web App, etc.  For this demo, it uses Console + Std I/O
             Resolver.RegisterObject(typeof(IConfigurationProvider), new TextConfiguratonProvider(Console.In, Console.Out));
 
-            // Player command provider could take the form of a TCP socket for network play, UI+Controller, etc.  
-            Resolver.RegisterObject(typeof(IPlayerCommandProvider), new TextPlayerCommandProvider(Console.In, Console.Out));
+            // Player command provider could take the form of an AI player, TCP socket for network play, UI+Controller, etc.  
+            Resolver.RegisterObject(typeof(IPlayerInterface), new TextPlayerCommandInterface(Console.In, Console.Out));
 
             try {
 
                 var config = Resolver.Resolve<IConfigurationProvider>()
                     .GetConfiguration();
 
-                var board1 = new GameBoard(config.Player1Name);
-                var board2 = new GameBoard(config.Player2Name);
+                IPlayerInterface playerCommandInterface = new TextPlayerCommandInterface(Console.In, Console.Out);
+                var board1 = new GameBoard();
+                var board2 = new GameBoard();
+                var player1 = new Player(config.Player1Name, board1, playerCommandInterface);
+                var player2 = new Player(config.Player2Name, board2, playerCommandInterface);
 
-                
-                IPlayerCommandProvider playerCommandProvider = new TextPlayerCommandProvider(Console.In, Console.Out);
+                player1.PlaceShip();
+                player2.PlaceShip();
 
-                playerCommandProvider.CreatePlaceShipCommand(board1).Execute();
-                playerCommandProvider.CreatePlaceShipCommand(board2).Execute();
-
-                while(!board1.Sunk && !board2.Sunk)
+                while (!board1.Sunk && !board2.Sunk)
                 {
-                    playerCommandProvider.CreateFireShotCommand(board1).Execute();
+                    player1.Fire(player2);
                     if (board2.Sunk)
                     {
                         break;
                     }
-                    playerCommandProvider.CreateFireShotCommand(board2).Execute();
+
+                    player2.Fire(player1);
                     if (board1.Sunk)
                     {
                         break;
                     }
                 }
 
-                var winner = board1.Sunk ? board2 : board1;
+                var winner = board1.Sunk ? player2 : player1;
 
                 // TODO:  Proper view instead of console write
-                Console.Out.Write("{0} wins!", winner.PlayerName);
+                Console.Out.Write("{0} wins!", winner.Name);
 
             }
             catch (LoggableException ex)
             {
+                // TODO: Seriously re think this strange exception type
+
                 // Have an exception that will be in a parsable format
                 logger.Error(ex.LogEvent);
                 Console.WriteLine(ex.LogEvent);
