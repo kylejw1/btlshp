@@ -55,8 +55,8 @@
   <ItemGroup>
     <Compile Include="Battleship.cs" />
     <Compile Include="Cell.cs" />
-    <Compile Include="PlayerInterface\IPlayerInterface.cs" />
-    <Compile Include="PlayerInterface\TextPlayerInterface.cs" />
+    <Compile Include="Player\IPlayerInterface.cs" />
+    <Compile Include="Player\TextPlayerInterface.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Config\ConfigVariables.cs" />
     <Compile Include="Config\IConfigurationProvider.cs" />
@@ -66,7 +66,7 @@
     <Compile Include="Logging\Log4NetLogger.cs" />
     <Compile Include="Logging\LogEvent.cs" />
     <Compile Include="Logging\LoggableException.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="Player\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resolver.cs" />
     <Compile Include="Ship.cs" />
@@ -75,7 +75,9 @@
     <Compile Include="GameBoard.cs" />
     <Compile Include="View\ConsoleViewTemplates.cs" />
     <Compile Include="View\ConsoleWindow.cs" />
+    <Compile Include="View\IGameBoardView.cs" />
     <Compile Include="View\IView.cs" />
+    <Compile Include="View\ConsoleGameBoardView.cs" />
     <Compile Include="View\TextViewTemplates.cs" />
   </ItemGroup>
   <ItemGroup>

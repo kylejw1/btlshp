@@ -7,12 +7,10 @@ using System.Threading.Tasks;
 
 namespace Battleship.View
 {
-    interface IView
+    public interface IGameBoardView
     {
-
-        void SetSunk(int sunkPlayer, IEnumerable<Point> sunkShipCoords);
-
-
-        void AppendMessage(string message);
+        void SetMiss(Point coordinate);
+        void SetHit(Point coordinate);
+        void SetPristine(Point coordinate);
     }
 }

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Battleship.Config;
 using Battleship.PlayerInterface;
+using System.Drawing;
 
 namespace Battleship
 {
@@ -21,7 +22,7 @@ namespace Battleship
             Resolver.RegisterObject(typeof(ILogger), new Log4NetLogger());
             var logger = Resolver.Resolve<ILogger>();
 
-            Resolver.RegisterObject(typeof(IView), new ConsoleView());
+            //Resolver.RegisterObject(typeof(IView), new ConsoleView());
 
             // Configuration provider could take the form of a UI+Controller, Web App, etc.  For this demo, it uses Console + Std I/O
             Resolver.RegisterObject(typeof(IConfigurationProvider), new TextConfiguratonProvider(Console.In, Console.Out));
@@ -35,9 +36,18 @@ namespace Battleship
                     .GetConfiguration();
 
                 IPlayerInterface playerInterface = new TextPlayerInterface(Console.In, Console.Out);
-                var player1 = new Player(config.Player1Name, playerInterface);
-                var player2 = new Player(config.Player2Name, playerInterface);
+                // TODO: put inside a main display class
+                var player1GameBoardView = new ConsoleGameBoardView(config.Player1Name, 0, 0);
+                var player2GameBoardView = new ConsoleGameBoardView(config.Player2Name, 50, 0);
+                var player1 = new Player(config.Player1Name, playerInterface, player1GameBoardView);
+                var player2 = new Player(config.Player2Name, playerInterface, player2GameBoardView);
 
+                Console.Clear();
+                Console.SetBufferSize(100, 32);
+                Console.SetWindowSize(100, 32);
+                player1GameBoardView.Draw();
+                player2GameBoardView.Draw();
+                
                 player1.PlaceShip();
                 player2.PlaceShip();
 
