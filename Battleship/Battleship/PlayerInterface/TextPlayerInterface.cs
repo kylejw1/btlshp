@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Text.RegularExpressions;
 
-namespace Battleship.Commands
+namespace Battleship.PlayerInterface
 {
     public class TextPlayerInterface : IPlayerInterface
     {
@@ -121,7 +121,7 @@ namespace Battleship.Commands
             _output.WriteLine(message);
         }
 
-        public void FireResult(CellState state)
+        public void NotifyFireResult(CellState state)
         {
             _output.WriteLine(state == CellState.Hit ? "Hit!" : "Miss!");
         }

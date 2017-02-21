@@ -55,14 +55,13 @@
   <ItemGroup>
     <Compile Include="Battleship.cs" />
     <Compile Include="Cell.cs" />
-    <Compile Include="Commands\IPlayerInterface.cs" />
-    <Compile Include="Commands\TextPlayerInterface.cs" />
+    <Compile Include="PlayerInterface\IPlayerInterface.cs" />
+    <Compile Include="PlayerInterface\TextPlayerInterface.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Config\ConfigVariables.cs" />
     <Compile Include="Config\IConfigurationProvider.cs" />
     <Compile Include="Config\TextConfigurationProvider.cs" />
     <Compile Include="Geometry.cs" />
-    <Compile Include="GameState.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\Log4NetLogger.cs" />
     <Compile Include="Logging\LogEvent.cs" />

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using Battleship.Config;
-using Battleship.Commands;
+using Battleship.PlayerInterface;
 
 namespace Battleship
 {

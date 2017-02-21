@@ -1,4 +1,4 @@
-﻿using Battleship.Commands;
+﻿using Battleship.PlayerInterface;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -58,6 +58,8 @@ namespace Battleship
                 }
 
                 cell.State = target._ship.Points.Any(p => p.Equals(point)) ? CellState.Hit : CellState.Miss;
+
+                _playerInterface.NotifyFireResult(cell.State);
 
                 fireComplete = true;
             }
