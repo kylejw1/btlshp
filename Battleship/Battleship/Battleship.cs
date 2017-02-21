@@ -27,38 +27,36 @@ namespace Battleship
             Resolver.RegisterObject(typeof(IConfigurationProvider), new TextConfiguratonProvider(Console.In, Console.Out));
 
             // Player command provider could take the form of an AI player, TCP socket for network play, UI+Controller, etc.  
-            Resolver.RegisterObject(typeof(IPlayerInterface), new TextPlayerCommandInterface(Console.In, Console.Out));
+            Resolver.RegisterObject(typeof(IPlayerInterface), new TextPlayerInterface(Console.In, Console.Out));
 
             try {
 
                 var config = Resolver.Resolve<IConfigurationProvider>()
                     .GetConfiguration();
 
-                IPlayerInterface playerCommandInterface = new TextPlayerCommandInterface(Console.In, Console.Out);
-                var board1 = new GameBoard();
-                var board2 = new GameBoard();
-                var player1 = new Player(config.Player1Name, board1, playerCommandInterface);
-                var player2 = new Player(config.Player2Name, board2, playerCommandInterface);
+                IPlayerInterface playerInterface = new TextPlayerInterface(Console.In, Console.Out);
+                var player1 = new Player(config.Player1Name, playerInterface);
+                var player2 = new Player(config.Player2Name, playerInterface);
 
                 player1.PlaceShip();
                 player2.PlaceShip();
 
-                while (!board1.Sunk && !board2.Sunk)
+                while (!player1.ShipSunk && !player2.ShipSunk)
                 {
                     player1.Fire(player2);
-                    if (board2.Sunk)
+                    if (player2.ShipSunk)
                     {
                         break;
                     }
 
                     player2.Fire(player1);
-                    if (board1.Sunk)
+                    if (player1.ShipSunk)
                     {
                         break;
                     }
                 }
 
-                var winner = board1.Sunk ? player2 : player1;
+                var winner = player1.ShipSunk ? player2 : player1;
 
                 // TODO:  Proper view instead of console write
                 Console.Out.Write("{0} wins!", winner.Name);

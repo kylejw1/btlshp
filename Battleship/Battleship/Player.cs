@@ -12,16 +12,14 @@ namespace Battleship
     {
         public readonly string Name;
 
-        private readonly GameBoard _gameBoard;
-        private IEnumerable<Point> _firedShots = new List<Point>();
-        private IPlayerInterface _commandProvider;
+        private readonly GameBoard _gameBoard = new GameBoard();
+        private IPlayerInterface _playerInterface;
         private Ship _ship;
 
-        public Player(string name, GameBoard gameBoard, IPlayerInterface commandProvider)
+        public Player(string name, IPlayerInterface commandProvider)
         {
             Name = name;
-            _gameBoard = gameBoard;
-            _commandProvider = commandProvider;
+            _playerInterface = commandProvider;
         }
 
         public bool ShipSunk
@@ -32,20 +30,56 @@ namespace Battleship
                 {
                     return false;
                 }
-                return _ship.Sunk;
+                return _ship.Points.All(p => _gameBoard.GetCell(p).State == CellState.Hit);
             }
         }
 
         public void Fire(Player target)
         {
-            var cmd = _commandProvider.CreateFireShotCommand(target._gameBoard);
-            cmd.Execute();
+            bool fireComplete = false;
+            while (!fireComplete)
+            {
+                // Get coord
+                var point = _playerInterface.GetFiringCoordinate(this);
+
+                // Check if coord legal on target (in rectangle)
+                if (!target._gameBoard.EnclosingRectangle.Contains(point))
+                {
+                    _playerInterface.DisplayError("Firing coordinate out of bounds.  Try again.");
+                    continue;
+                }
+
+                // Check if coord has not been fired on
+                var cell = target._gameBoard.GetCell(point);
+                if (cell.State != CellState.Pristine)
+                {
+                    _playerInterface.DisplayError("Cell has already been fired upon.  Try again.");
+                    continue;
+                }
+
+                cell.State = target._ship.Points.Any(p => p.Equals(point)) ? CellState.Hit : CellState.Miss;
+
+                fireComplete = true;
+            }
         }
 
         public void PlaceShip()
         {
-            var cmd = _commandProvider.CreatePlaceShipCommand(_gameBoard);
-            cmd.Execute();
+            bool shipPositionValid = false;
+            Ship ship = null;
+            while(!shipPositionValid)
+            {
+                ship = _playerInterface.GetPlayerShip(this);
+
+                if (!ship.Points.All(p => _gameBoard.EnclosingRectangle.Contains(p)))
+                {
+                    _playerInterface.DisplayError("Ship location out of bounds.  Try again.");
+                    continue;
+                }
+
+                shipPositionValid = true;
+            }
+            _ship = ship;
         }
 
     }

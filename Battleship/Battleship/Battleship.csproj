@@ -55,11 +55,8 @@
   <ItemGroup>
     <Compile Include="Battleship.cs" />
     <Compile Include="Cell.cs" />
-    <Compile Include="Commands\FireShotPlayerCommand.cs" />
-    <Compile Include="Commands\IPlayerCommand.cs" />
     <Compile Include="Commands\IPlayerInterface.cs" />
-    <Compile Include="Commands\PlaceShipPlayerCommand.cs" />
-    <Compile Include="Commands\TextPlayerCommandInterface.cs" />
+    <Compile Include="Commands\TextPlayerInterface.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Config\ConfigVariables.cs" />
     <Compile Include="Config\IConfigurationProvider.cs" />

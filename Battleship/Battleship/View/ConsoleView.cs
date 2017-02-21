@@ -1,6 +1,7 @@
 ﻿using Battleship.Logging;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,13 +56,13 @@ namespace Battleship.View
             throw new NotImplementedException();
         }
 
-        public void SetHit(int player, Coordinate coordinate)
+        public void SetHit(int player, Point coordinate)
         {
             //TODO BEEPS
             throw new NotImplementedException();
         }
 
-        public void SetMiss(int player, Coordinate coordinate)
+        public void SetMiss(int player, Point coordinate)
         {
             throw new NotImplementedException();
         }
@@ -83,7 +84,7 @@ namespace Battleship.View
             }
         }
 
-        public void SetSunk(int sunkPlayer, IEnumerable<Coordinate> sunkShipCoords)
+        public void SetSunk(int sunkPlayer, IEnumerable<Point> sunkShipCoords)
         {
             //TODO BEEPS
             throw new NotImplementedException();
@@ -108,7 +109,7 @@ namespace Battleship.View
             _titleWindow.Draw((_mainWindow.Width - _titleWindow.Width) / 2, (_mainWindow.Height - _titleWindow.Height) / 2);
         }
 
-        public void SetPristine(int player, Coordinate coordinate)
+        public void SetPristine(int player, Point coordinate)
         {
             throw new NotImplementedException();
         }

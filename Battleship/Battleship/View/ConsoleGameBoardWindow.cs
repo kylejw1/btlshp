@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace Battleship.View
             _y = y;
         }
 
-        public void DrawShot(char character, Coordinate shotLocation)
+        public void DrawShot(char character, Point shotLocation)
         {
             var left = Console.CursorLeft;
             var top = Console.CursorTop;
