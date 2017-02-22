@@ -38,7 +38,7 @@ namespace Battleship.View
 
             //Ship drawn before fire attempts
             _shipPoints.ForEach(s => DrawPoint(s, '#', ConsoleColor.Green));
-            _misses.ForEach(m => DrawPoint(m, '~', ConsoleColor.Blue));
+            _misses.ForEach(m => DrawPoint(m, '*', ConsoleColor.Blue));
             _hits.ForEach(h => DrawPoint(h, 'X', ConsoleColor.Red));
 
             if (_sunk)

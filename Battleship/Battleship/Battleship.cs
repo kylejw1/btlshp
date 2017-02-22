@@ -13,22 +13,8 @@ namespace Battleship
     {
         static void Main(string[] args)
         {
-            // All resolved interface instances can easily be made configurable in a config file, or even at run time.  
-            // Eg. for hypothetical network play, the console could be used to determine network configuration, host or client, etc. 
-            // Then the game command provider would use some kind of network stream instead of std I/O.
-            // Though a complete game would likely use a package such as castle windsor to achieve this.
-
-            Resolver.RegisterObject(typeof(ILogger), new Log4NetLogger());
             var logger = Resolver.Resolve<ILogger>();
             logger.Info("Application Starting");
-
-            Resolver.RegisterObject(typeof(IGameView), new ConsoleGameView());
-
-            // Configuration provider could take the form of a UI+Controller, Web App, etc.  For this demo, it uses Console + Std I/O
-            Resolver.RegisterObject(typeof(IConfigurationProvider), new TextConfiguratonProvider(Console.In, Console.Out));
-
-            // Player command provider could take the form of an AI player, TCP socket for network play, UI+Controller, etc.  
-            Resolver.RegisterObject(typeof(IPlayerInterface), new TextPlayerInterface(Console.In, Console.Out));
 
             try {
                 // Resolve dependencies 
