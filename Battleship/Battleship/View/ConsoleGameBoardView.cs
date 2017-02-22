@@ -16,6 +16,12 @@ namespace Battleship.View
         private List<Point> _shipPoints = new List<Point>();
         private bool _sunk = false;
 
+        /// <summary>
+        /// A small view for one battleship grid
+        /// </summary>
+        /// <param name="playerName"></param>
+        /// <param name="xOffset"></param>
+        /// <param name="yOffset"></param>
         public ConsoleGameBoardView(string playerName, int xOffset, int yOffset)
         {
             _xOffset = xOffset;
@@ -23,6 +29,9 @@ namespace Battleship.View
             Template[0] = playerName;
         }
 
+        /// <summary>
+        /// Draw the grid to console
+        /// </summary>
         public void Draw()
         {
             ConsoleDraw(Template, _xOffset, _yOffset, ConsoleColor.White);
@@ -38,6 +47,13 @@ namespace Battleship.View
             }
         }
 
+        /// <summary>
+        /// Draw the grid to console and return the cursor when done
+        /// </summary>
+        /// <param name="lines"></param>
+        /// <param name="xOffset"></param>
+        /// <param name="yOffset"></param>
+        /// <param name="color"></param>
         private void ConsoleDraw(IEnumerable<string> lines, int xOffset, int yOffset, ConsoleColor color)
         {
             var cursorLeft = Console.CursorLeft;

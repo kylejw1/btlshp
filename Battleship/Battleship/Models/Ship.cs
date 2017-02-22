@@ -12,6 +12,11 @@ namespace Battleship
         public List<Point> Points { get; private set; }
         private static readonly int ShipLength = 3;
 
+        /// <summary>
+        /// Create a ship from three colinear coordinates, either horizontal or vertical
+        /// </summary>
+        /// <param name="startPoint"></param>
+        /// <param name="endPoint"></param>
         public Ship(Point startPoint, Point endPoint)
         {
             // Ship does not care if it fits in the game board.  So negative coordinates
@@ -45,16 +50,19 @@ namespace Battleship
             ValidateCoordinates();
         }
 
+        /// <summary>
+        /// Validate ship coordinates
+        /// </summary>
         private void ValidateCoordinates()
         {
             if (Points.Count != ShipLength)
             {
-                throw new ArgumentOutOfRangeException(string.Format("Ship must be exactly {0} cells", ShipLength));
+                throw new ArgumentOutOfRangeException(string.Format("Ship :: ValidateCoordinates :: Ship must be exactly {0} cells", ShipLength));
             }
 
             if (!Geometry.ColinearAboutAxes(Points))
             {
-                throw new ArgumentException("Ship coordinates must be horizontal or vertical");
+                throw new ArgumentException("Ship :: ValidateCoordinates :: Ship coordinates must be horizontal or vertical");
             }
         }
 

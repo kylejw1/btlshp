@@ -1,13 +1,10 @@
-﻿using Battleship.View;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using Battleship.Config;
+using Battleship.Logging;
 
 namespace Battleship.PlayerInterface
 {
@@ -15,9 +12,10 @@ namespace Battleship.PlayerInterface
     {
         private TextReader _input;
         private TextWriter _output;
+        ILogger logger = Resolver.Resolve<ILogger>();
 
         /// <summary>
-        /// Game configuration provider based on text streams.  Closure of streams is the responsibility of the caller.
+        /// Get player moves from a text interface.  This may be the console, or other source
         /// </summary>
         /// <param name="input"></param>
         /// <param name="output"></param>
@@ -25,13 +23,18 @@ namespace Battleship.PlayerInterface
         {
             if (null == input || null == output)
             {
-                throw new ArgumentNullException("Both input reader and output writer must be defined");
+                throw new ArgumentNullException("TextPlayerInterface :: ctor :: Both input reader and output writer must be defined");
             }
 
             _input = input;
             _output = output;
         }
 
+        /// <summary>
+        /// Request a firing coordinate from this player
+        /// </summary>
+        /// <param name="shooter"></param>
+        /// <returns></returns>
         public Point GetFiringCoordinate(Player shooter)
         {
             bool validPoint = false;
@@ -42,7 +45,7 @@ namespace Battleship.PlayerInterface
             {
                 if (tries++ > ConfigVariables.MaxInputAttempts)
                 {
-                    throw new Exception("Exceeded max attempts.");
+                    throw new Exception("TextPlayerInterface :: GetFiringCoordinate :: Exceeded max attempts.");
                 }
 
                 _output.WriteLine("{0}, what are our firing coordinates?", shooter.Name);
@@ -60,6 +63,11 @@ namespace Battleship.PlayerInterface
             return point; 
         }
 
+        /// <summary>
+        /// Request the players desired ship location
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
         public Ship GetPlayerShip(Player player)
         {
             Ship ship = null;
@@ -69,7 +77,7 @@ namespace Battleship.PlayerInterface
             {
                 if (tries++ > ConfigVariables.MaxInputAttempts)
                 {
-                    throw new Exception("Exceeded max attempts.");
+                    throw new Exception("TextPlayerInterface :: GetPlayerShip :: Exceeded max attempts.");
                 }
 
                 _output.WriteLine("{0}, choose your location!  Example: A1 C1 (Ship length 3 squares vertical or horizontal)", player.Name);
@@ -108,10 +116,17 @@ namespace Battleship.PlayerInterface
             return ship;
         }
 
+        /// <summary>
+        /// Attempt to parse a coordinate from a text input
+        /// </summary>
+        /// <param name="pointStr"></param>
+        /// <param name="point"></param>
+        /// <returns></returns>
         private bool TryParsePoint(string pointStr, out Point point)
         {
             if (string.IsNullOrWhiteSpace(pointStr))
             {
+                logger.Warn("TextPlayerInterface :: TryParsePoint :: Tried to parse null point");
                 point = new Point();
                 return false;
             }
@@ -119,6 +134,7 @@ namespace Battleship.PlayerInterface
             var match = Regex.Match(pointStr, @"^(?<col>[\w])(?<row>[\d])$");
             if (!match.Success)
             {
+                logger.Warn("TextPlayerInterface :: TryParsePoint :: Failed regex match on input " + pointStr);
                 point = new Point();
                 return false;
             }

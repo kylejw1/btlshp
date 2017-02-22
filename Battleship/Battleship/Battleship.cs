@@ -20,6 +20,7 @@ namespace Battleship
 
             Resolver.RegisterObject(typeof(ILogger), new Log4NetLogger());
             var logger = Resolver.Resolve<ILogger>();
+            logger.Info("Application Starting");
 
             Resolver.RegisterObject(typeof(IGameView), new ConsoleGameView());
 
@@ -30,7 +31,7 @@ namespace Battleship
             Resolver.RegisterObject(typeof(IPlayerInterface), new TextPlayerInterface(Console.In, Console.Out));
 
             try {
-                // Resolve dependencies
+                // Resolve dependencies 
                 var config = Resolver.Resolve<IConfigurationProvider>().GetConfiguration();
                 IGameView view = Resolver.Resolve<IGameView>();
                 IPlayerInterface playerInterface = Resolver.Resolve<IPlayerInterface>();
@@ -40,6 +41,8 @@ namespace Battleship
 
                 view.Initialize(player1, player2);    
                 view.Show();
+
+                logger.Info(string.Format("Starting match between {0} and {1}", player1.Name, player2.Name));
 
                 var ship1 = GetPlayerShip(player1, playerInterface);
                 player1.SetShip(ship1);
@@ -66,10 +69,12 @@ namespace Battleship
 
                 if (player1.ShipSunk)
                 {
+                    logger.Info(string.Format("{0} ship sunk", player1.Name));
                     view.SetSunk(player1);
                 }
                 else
                 {
+                    logger.Info(string.Format("{0} ship sunk", player2.Name));
                     view.SetSunk(player2);
                 }
             }
@@ -79,8 +84,8 @@ namespace Battleship
                 logger.Error("Exception ocurred in Main :: ", ex);
             }
             Console.ReadLine();
-            
 
+            logger.Info("Application Exiting");
         }
 
         private static void FireShot(Player shooter, Player target, IPlayerInterface playerInterface, IGameView view)
@@ -101,7 +106,7 @@ namespace Battleship
             {
                 if (tries++ > ConfigVariables.MaxInputAttempts)
                 {
-                    throw new Exception("Exceeded max attempts.");
+                    throw new Exception("GetPlayerShip Exceeded max attempts.");
                 }
 
                 ship = playerInterface.GetPlayerShip(player);
@@ -127,7 +132,7 @@ namespace Battleship
             {
                 if (tries++ > ConfigVariables.MaxInputAttempts)
                 {
-                    throw new Exception("Exceeded max attempts.");
+                    throw new Exception("GetShotCoordinates Exceeded max attempts.");
                 }
 
                 // Get coord

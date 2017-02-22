@@ -18,13 +18,17 @@ namespace Battleship.Config
         {
             if (null == input || null == output)
             {
-                throw new ArgumentNullException("Both input reader and output writer must be defined");
+                throw new ArgumentNullException("TextConfiguratonProvider :: ctor :: Both input reader and output writer must be defined");
             }
 
             _input = input;
             _output = output;
         }
 
+        /// <summary>
+        /// Get Configuration parameters such as player names
+        /// </summary>
+        /// <returns></returns>
         public Configuration GetConfiguration()
         {
             DrawTitle(_output);
@@ -40,6 +44,10 @@ namespace Battleship.Config
             return new Configuration(p1, p2);
         }
 
+        /// <summary>
+        /// Draw game title banner
+        /// </summary>
+        /// <param name="_output"></param>
         private void DrawTitle(TextWriter _output)
         {
             Title.ForEach(line => _output.WriteLine(line));

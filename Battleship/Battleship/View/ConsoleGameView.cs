@@ -16,6 +16,11 @@ namespace Battleship.View
         private int _cursorTop;
         private int _cursorLeft;
 
+        /// <summary>
+        /// Initialize the view and create any subviews if necessary
+        /// </summary>
+        /// <param name="player1"></param>
+        /// <param name="player2"></param>
         public void Initialize(Player player1, Player player2)
         {
             Console.SetWindowSize(WindowWidth, WindowHeight);
@@ -30,6 +35,9 @@ namespace Battleship.View
             _cursorTop = _views.Values.Max(v => v.Height) + 2;
         }
 
+        /// <summary>
+        /// Display the game with game boards
+        /// </summary>
         public void Show()
         {
             Console.Clear();
