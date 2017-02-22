@@ -1,11 +1,5 @@
 ﻿using log4net;
-using log4net.Config;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Battleship.Logging
 {
@@ -13,19 +7,19 @@ namespace Battleship.Logging
     {
         private readonly ILog logger = LogManager.GetLogger(typeof(Battleship));
 
-        public void Error(LogEvent logEvent)
+        public void Error(string message, Exception ex=null)
         {
-            logger.Error(logEvent);
+            logger.Error(string.Format("{0}{1}{2}", message, null == ex ? "" : " :: ", null == ex ? "" : ex.Message));
         }
 
-        public void Info(LogEvent logEvent)
+        public void Info(string message, Exception ex = null)
         {
-            logger.Info(logEvent);
+            logger.Info(string.Format("{0}{1}{2}", message, null == ex ? "" : " :: ", null == ex ? "" : ex.Message));
         }
 
-        public void Warn(LogEvent logEvent)
+        public void Warn(string message, Exception ex = null)
         {
-            logger.Warn(logEvent);
+            logger.Warn(string.Format("{0}{1}{2}", message, null == ex ? "" : " :: ", null == ex ? "" : ex.Message));
         }
     }
 }

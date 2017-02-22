@@ -3,15 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Battleship.View
 {
-    public class ConsoleGameBoardView : ConsoleView, IGameBoardView
+    public class ConsoleGameBoardView
     {
         private int _xOffset;
         private int _yOffset;
+
+        private List<Point> _hits = new List<Point>();
+        private List<Point> _misses = new List<Point>();
+        private List<Point> _shipPoints = new List<Point>();
+        private bool _sunk = false;
 
         public ConsoleGameBoardView(string playerName, int xOffset, int yOffset)
         {
@@ -20,9 +23,62 @@ namespace Battleship.View
             Template[0] = playerName;
         }
 
-        public override void Draw()
+        public void Draw()
         {
             ConsoleDraw(Template, _xOffset, _yOffset, ConsoleColor.White);
+
+            //Ship drawn before fire attempts
+            _shipPoints.ForEach(s => DrawPoint(s, '#', ConsoleColor.Green));
+            _misses.ForEach(m => DrawPoint(m, '~', ConsoleColor.Blue));
+            _hits.ForEach(h => DrawPoint(h, 'X', ConsoleColor.Red));
+
+            if (_sunk)
+            {
+                ConsoleDraw(SunkText, _xOffset + 3, _yOffset + 5, ConsoleColor.Red);
+            }
+        }
+
+        private void ConsoleDraw(IEnumerable<string> lines, int xOffset, int yOffset, ConsoleColor color)
+        {
+            var cursorLeft = Console.CursorLeft;
+            var cursorTop = Console.CursorTop;
+            var fgColor = Console.ForegroundColor;
+            var cursorVisible = Console.CursorVisible;
+
+            Console.ForegroundColor = color;
+            Console.CursorVisible = false;
+
+            foreach (var line in lines)
+            {
+                Console.SetCursorPosition(xOffset, yOffset++);
+                Console.Out.Write(line);
+            }
+
+            // Restore previous values
+            Console.SetCursorPosition(cursorLeft, cursorTop);
+            Console.ForegroundColor = fgColor;
+            Console.CursorVisible = cursorVisible;
+        }
+
+        public void SetShip(IEnumerable<Point> shipPoints)
+        {
+            _shipPoints = shipPoints.ToList();
+        }
+
+        public int Width
+        {
+            get
+            {
+                return Template.Max(s => s.Length);
+            }
+        }
+
+        public int Height
+        {
+            get
+            {
+                return Template.Count;
+            }
         }
 
         public List<string> Template = new List<string>() {
@@ -48,6 +104,16 @@ namespace Battleship.View
             @"+---+---+---+---+---+---+---+---+---+"
         };
 
+        private List<string> SunkText = new List<string>() {
+            @" ______________________________",
+            @"|   _____ __  ___   ____ __ __ |",
+            @"|  / ___// / / / | / / //_// / |",
+            @"|  \__ \/ / / /  |/ / ,<  / /  |",
+            @"| ___/ / /_/ / /|  / /| |/_/   |",
+            @"|/____/\____/_/ |_/_/ |_(_)    |",
+            @"|______________________________|"
+        };
+
         private void DrawPoint(Point p, char value, ConsoleColor color)
         {
             if (p.X < 0 || p.Y < 0 || p.X >= ConfigVariables.GridCols || p.Y > ConfigVariables.GridRows)
@@ -64,17 +130,29 @@ namespace Battleship.View
 
         public void SetHit(Point coordinate)
         {
-            DrawPoint(coordinate, 'X', ConsoleColor.Red);
+            _hits.Add(coordinate);
         }
 
         public void SetMiss(Point coordinate)
         {
-            DrawPoint(coordinate, '~', ConsoleColor.Blue);
+            _misses.Add(coordinate);
         }
 
         public void SetPristine(Point coordinate)
         {
-            DrawPoint(coordinate, ' ', ConsoleColor.Black);
+            if (_hits.Contains(coordinate))
+            {
+                _hits.Remove(coordinate);
+            }
+            if (_misses.Contains(coordinate))
+            {
+                _misses.Remove(coordinate);
+            }
+        }
+
+        public void SetSunk()
+        {
+            _sunk = true;
         }
     }
 }

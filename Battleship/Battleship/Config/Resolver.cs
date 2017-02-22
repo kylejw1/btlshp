@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Battleship
+namespace Battleship.Config
 {
     public static class Resolver
     {

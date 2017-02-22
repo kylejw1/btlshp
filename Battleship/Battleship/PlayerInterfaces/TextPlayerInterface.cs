@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Text.RegularExpressions;
+using Battleship.Config;
 
 namespace Battleship.PlayerInterface
 {
@@ -35,9 +36,15 @@ namespace Battleship.PlayerInterface
         {
             bool validPoint = false;
             Point point = new Point();
+            int tries = 0;
 
             while (!validPoint)
             {
+                if (tries++ > ConfigVariables.MaxInputAttempts)
+                {
+                    throw new Exception("Exceeded max attempts.");
+                }
+
                 _output.WriteLine("{0}, what are our firing coordinates?", shooter.Name);
 
                 var pointStr = _input.ReadLine();
@@ -56,9 +63,15 @@ namespace Battleship.PlayerInterface
         public Ship GetPlayerShip(Player player)
         {
             Ship ship = null;
+            int tries = 0;
 
             while (null == ship)
             {
+                if (tries++ > ConfigVariables.MaxInputAttempts)
+                {
+                    throw new Exception("Exceeded max attempts.");
+                }
+
                 _output.WriteLine("{0}, choose your location!  Example: A1 C1 (Ship length 3 squares vertical or horizontal)", player.Name);
                 var locationStr = _input.ReadLine();
 
@@ -97,6 +110,12 @@ namespace Battleship.PlayerInterface
 
         private bool TryParsePoint(string pointStr, out Point point)
         {
+            if (string.IsNullOrWhiteSpace(pointStr))
+            {
+                point = new Point();
+                return false;
+            }
+
             var match = Regex.Match(pointStr, @"^(?<col>[\w])(?<row>[\d])$");
             if (!match.Success)
             {
@@ -110,7 +129,7 @@ namespace Battleship.PlayerInterface
             // Row comes in 1-indexed, so convert to 0-index
             int rowIndex = int.Parse(match.Groups["row"].Value) - 1;
 
-            point = new Point(rowIndex, colIndex);
+            point = new Point(colIndex, rowIndex);
             return true;
         }
 
@@ -119,9 +138,5 @@ namespace Battleship.PlayerInterface
             _output.WriteLine(message);
         }
 
-        public void NotifyFireResult(CellState state)
-        {
-            _output.WriteLine(state == CellState.Hit ? "Hit!" : "Miss!");
-        }
     }
 }

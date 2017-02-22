@@ -1,10 +1,6 @@
-﻿using Battleship.View;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Battleship.Config
 {
@@ -46,14 +42,17 @@ namespace Battleship.Config
 
         private void DrawTitle(TextWriter _output)
         {
-            var initialColor = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-
-            var title = TextViewTemplates.Title;
-
-            title.ForEach(line => _output.WriteLine(line));
-
-            Console.ForegroundColor = initialColor;
+            Title.ForEach(line => _output.WriteLine(line));
         }
+
+        private List<string> Title = new List<string>() {
+            @" _____________________________________________________________",
+            @"|    ____  ___  ______________    ___________ __  __________  |",
+            @"|   / __ )/   |/_  __/_  __/ /   / ____/ ___// / / /  _/ __ \ |",
+            @"|  / __  / /| | / /   / / / /   / __/  \__ \/ /_/ // // /_/ / |",
+            @"| / /_/ / ___ |/ /   / / / /___/ /___ ___/ / __  // // ____/  |",
+            @"|/_____/_/  |_/_/   /_/ /_____/_____//____/_/ /_/___/_/       |",
+            @"|_____________________________________________________________|"
+        };
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Battleship.Misc;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -13,6 +14,9 @@ namespace Battleship
 
         public Ship(Point startPoint, Point endPoint)
         {
+            // Ship does not care if it fits in the game board.  So negative coordinates
+            // are acceptable.  When we place the ship we deny negatives.
+
             Points = new List<Point>();
             Points.Add(startPoint);
             Points.Add(endPoint);
